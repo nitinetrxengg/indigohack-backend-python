@@ -1,31 +1,24 @@
-schemaVersion: 2.1.0
+schemaVersion: 2.2.0
 metadata:
-  name: python-app
+  attributes:
+    metadata-name-field: generateName
 components:
-  - name: tools
+  - attributes:
+      controller.devfile.io/merge-contribution: true
     container:
       endpoints:
         - exposure: public
           name: app-url
           protocol: https
-          targetPort: 8080    
+          targetPort: 8080
       image: quay.io/devfile/universal-developer-image:ubi8-latest
+      memoryLimit: 512Mi
+      mountSources: true
+      sourceMapping: /projects
       volumeMounts:
         - name: venv
           path: /home/user/.venv
-      memoryLimit: 512Mi
-      mountSources: true
-
+    name: python
   - name: venv
     volume:
       size: 1G
-
-commands:
-  - id: run-application
-    exec:
-      label: "Run application"
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: "pip install -r requirements.txt && python3 app.py"
-      group:
-        kind: run
